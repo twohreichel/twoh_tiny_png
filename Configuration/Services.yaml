@@ -1,0 +1,26 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  TWOH\TwohTinyPng\:
+    resource: '../Classes/*'
+    exclude: '../Classes/Domain/Model/*'
+
+  TWOH\TwohTinyPng\File\UploadEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'twoh-tiny-png/file/upload-event-listener'
+
+  TWOH\TwohTinyPng\Command\BulkCompressionCommand:
+    tags:
+      - name: console.command
+        command: 'bulk:images'
+        description: 'A command that compressed all images in fileadmin directory.'
+
+  TWOH\TwohTinyPng\Command\BulkMetaDataCommand:
+    tags:
+      - name: console.command
+        command: 'bulk:metadata'
+        description: 'A command that regenerate image meta data.'

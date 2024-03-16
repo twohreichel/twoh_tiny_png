@@ -1,0 +1,12 @@
+plugin.tx_twohtinypng{
+    settings {
+        # cat=plugin.tx_twohtinypng//b; type=string; label=Tiny PNG Api Key
+        apiKey =
+        # cat=plugin.tx_twohtinypng//b; type=string; label=Width on which the picture should be cut
+        width =
+        # cat=plugin.tx_twohtinypng//b; type=string; label=Storage PID
+        pid =
+        # cat=plugin.tx_twohtinypng//b; type=string; label=Ignore Images by Foldername (comma separated)
+        ignoreImagesByFolderName =
+    }
+}

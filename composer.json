@@ -1,0 +1,43 @@
+{
+    "name": "twoh/twoh_tiny_png",
+    "type": "typo3-cms-extension",
+    "description": "Optimize your TYPO3 Images",
+    "keywords": [
+        "TYPO3",
+        "extension",
+        "content",
+        "element",
+        "angular"
+    ],
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "Andreas Reichel",
+            "role": "Developer",
+            "email": "a.reichel91@outlook.com"
+        }
+    ],
+    "version": "1.0.0",
+    "require": {
+        "php": ">=8.0",
+        "typo3/cms-core": "^12.4",
+        "tinify/tinify": "^1.5.3",
+        "ext-gd": "*",
+        "ext-pdo": "*"
+    }
+    ,
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    },
+    "autoload": {
+        "psr-4": {
+            "TWOH\\TwohTinyPng\\": "Classes"
+        },
+        "classmap": ["Classes/"]
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "twoh_tiny_png"
+        }
+    }
+}

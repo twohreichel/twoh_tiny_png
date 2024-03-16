@@ -1,0 +1,8 @@
+plugin.tx_twohtinypng{
+    settings {
+        apiKey = {$plugin.tx_twohtinypng.settings.apiKey}
+        width = {$plugin.tx_twohtinypng.settings.width}
+        pid = {$plugin.tx_twohtinypng.settings.pid}
+        ignoreImagesByFolderName = {$plugin.tx_twohtinypng.settings.ignoreImagesByFolderName}
+    }
+}
