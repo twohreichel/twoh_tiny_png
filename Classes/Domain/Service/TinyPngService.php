@@ -42,6 +42,8 @@ class TinyPngService implements LoggerAwareInterface
      */
     protected MetaDataUtility $metaDataUtility;
 
+    protected bool $tinifyReady = false;
+
     /**
      * @throws AccountException
      * @throws InvalidConfigurationTypeException
@@ -51,9 +53,6 @@ class TinyPngService implements LoggerAwareInterface
         $this->args = $this->getTsSetup();
         $this->databaseUtility = GeneralUtility::makeInstance(DatabaseUtility::class);
         $this->metaDataUtility = GeneralUtility::makeInstance(MetaDataUtility::class);
-
-        setKey($this->args['apiKey']);
-        validate();
     }
 
     /**
@@ -70,6 +69,19 @@ class TinyPngService implements LoggerAwareInterface
         return $settings['plugin.']['tx_twohtinypng.']['settings.'];
     }
 
+    private function ensureTinifyReady(): void {
+        if ($this->tinifyReady) return;
+
+        $apiKey = $this->args['apiKey'] ?? '';
+        if ($apiKey === '') {
+            throw new \RuntimeException('TinyPNG API key is not configured');
+        }
+        setKey($apiKey);
+        validate();
+
+        $this->tinifyReady = true;
+    }
+
     /**
      * @param string $path
      * @param string $img
@@ -80,6 +92,7 @@ class TinyPngService implements LoggerAwareInterface
         string $img
     ): void
     {
+        $this->ensureTinifyReady();
         $folderAllowed = true;
 
         if ($this->args['ignoreImagesByFolderName']) {
@@ -122,9 +135,11 @@ class TinyPngService implements LoggerAwareInterface
                         );
                     }
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 // @extensionScannerIgnoreLine
-                $this->logger->error($e->getMessage());
+                if ($this->logger ?? null) {
+                    $this->logger->error($e->getMessage());
+                }
             }
         }
     }
