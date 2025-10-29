@@ -69,8 +69,11 @@ class TinyPngService implements LoggerAwareInterface
         return $settings['plugin.']['tx_twohtinypng.']['settings.'];
     }
 
-    private function ensureTinifyReady(): void {
-        if ($this->tinifyReady) return;
+    private function ensureTinifyReady(): void
+    {
+        if ($this->tinifyReady) {
+            return;
+        }
 
         $apiKey = $this->args['apiKey'] ?? '';
         if ($apiKey === '') {
@@ -137,7 +140,7 @@ class TinyPngService implements LoggerAwareInterface
                 }
             } catch (\Throwable $e) {
                 // @extensionScannerIgnoreLine
-                if ($this->logger ?? null) {
+                if ($this->logger !==  null) {
                     $this->logger->error($e->getMessage());
                 }
             }

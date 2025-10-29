@@ -2,7 +2,7 @@
 
 $EM_CONF['twoh_tiny_png'] = [
     'title' => 'Tiny PNG',
-    'description' => 'Optimze your TYPO3 Images with Tiny PNG',
+    'description' => 'Optimize your TYPO3 Images with Tiny PNG',
     'category' => 'plugin',
     'author' => 'Andreas Reichel, Igor Smertin',
     'author_email' => 'a.reichel91@outlook.com, igor.smertin@web.de',
