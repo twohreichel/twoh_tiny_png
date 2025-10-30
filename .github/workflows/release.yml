@@ -1,0 +1,99 @@
+name: TYPO3 Extension CI & Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, intl, pdo, gd, curl, json
+          coverage: none
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress
+
+      # optional: PHP lint
+      - name: PHP Syntax Check
+        run: |
+          find Classes -type f -name "*.php" -print0 | xargs -0 -n1 php -l
+
+      # optional: run your tests if you have them
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit --configuration phpunit.xml.dist
+
+  release:
+    name: Create GitHub Release
+    needs: build-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from composer.json and ext_emconf.php
+        id: get_version
+        run: |
+          COMPOSER_VERSION=$(jq -r .version composer.json)
+
+          EXT_VERSION=$(php -r '
+            $EM_CONF = [];
+            include "ext_emconf.php";
+            echo $EM_CONF[array_key_first($EM_CONF)]["version"];
+          ')
+
+          echo "Composer version: $COMPOSER_VERSION"
+          echo "ext_emconf version: $EXT_VERSION"
+
+          if [ "$COMPOSER_VERSION" != "$EXT_VERSION" ]; then
+            echo "::error ::Version mismatch between composer.json ($COMPOSER_VERSION) and ext_emconf.php ($EXT_VERSION)"
+            exit 1
+          fi
+
+          echo "version=$COMPOSER_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog from commits
+        id: changelog
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          echo "Last tag: $LAST_TAG"
+          if [ -n "$LAST_TAG" ]; then
+            LOG=$(git log ${LAST_TAG}..HEAD --pretty=format:'- %s')
+          else
+            LOG=$(git log --pretty=format:'- %s')
+          fi
+          echo "log<<EOF" >> $GITHUB_OUTPUT
+          echo "$LOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Tag
+        run: |
+          git tag "v${{ steps.get_version.outputs.version }}"
+          git push origin "v${{ steps.get_version.outputs.version }}"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "v${{ steps.get_version.outputs.version }}"
+          name: "Release v${{ steps.get_version.outputs.version }}"
+          body: ${{ steps.changelog.outputs.log }}

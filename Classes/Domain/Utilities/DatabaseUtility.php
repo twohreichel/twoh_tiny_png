@@ -38,7 +38,7 @@ class DatabaseUtility
                         $queryBuilder->createNamedParameter(0, \PDO::PARAM_INT)
                     )
                 )
-                ->execute();
+                ->executeQuery();
 
             $count = $result->fetchAllAssociative();
 
@@ -73,7 +73,7 @@ class DatabaseUtility
                         $queryBuilder->createNamedParameter('%' . $queryBuilder->escapeLikeWildcards($identifier) . '%')
                     )
                 )
-                ->execute();
+                ->executeQuery();
 
             return $result->fetchAllAssociative();
         }
@@ -107,7 +107,7 @@ class DatabaseUtility
                         )
                     )
                 )
-                ->execute();
+                ->executeQuery();
 
             return $result->fetchAllAssociative();
         }
@@ -129,7 +129,7 @@ class DatabaseUtility
         $queryBuilder
             ->insert('tx_twohtinypng_domain_model_tiny')
             ->values($tinyPngArray)
-            ->execute();
+            ->executeStatement();
     }
 
     /**
@@ -159,7 +159,7 @@ class DatabaseUtility
                 )
             )
             ->set('size', $fileSize)
-            ->execute();
+            ->executeStatement();
     }
 
     /**
@@ -191,6 +191,6 @@ class DatabaseUtility
             )
             ->set('width', $currentFileDimensions[0])
             ->set('height', $currentFileDimensions[1])
-            ->execute();
+            ->executeStatement();
     }
 }

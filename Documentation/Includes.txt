@@ -1,0 +1,6 @@
+.. This file is included at the top of all .rst files.
+.. Define common replacements or shared directives if needed.
+
+.. |extension_key| replace:: twoh_tiny_png
+.. |project| replace:: Tiny PNG
+.. |author| replace:: Andreas Reichel, Igor Smertin

@@ -5,9 +5,9 @@
     "keywords": [
         "TYPO3",
         "extension",
-        "content",
-        "element",
-        "angular"
+        "image",
+        "optimization",
+        "tinypng"
     ],
     "license": "GPL-2.0+",
     "authors": [
@@ -15,9 +15,14 @@
             "name": "Andreas Reichel",
             "role": "Developer",
             "email": "a.reichel91@outlook.com"
+        },
+        {
+            "name": "Igor Smertin",
+            "role": "Developer",
+            "email": "igor.smertin@web.de"
         }
     ],
-    "version": "1.0.0",
+    "version": "1.0.1",
     "require": {
         "php": ">=8.0",
         "typo3/cms-core": "^12.4",
@@ -32,8 +37,7 @@
     "autoload": {
         "psr-4": {
             "TWOH\\TwohTinyPng\\": "Classes"
-        },
-        "classmap": ["Classes/"]
+        }
     },
     "extra": {
         "typo3/cms": {
