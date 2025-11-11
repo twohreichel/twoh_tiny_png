@@ -28,8 +28,12 @@
         "tinify/tinify": "^1.5.3",
         "ext-gd": "*",
         "ext-pdo": "*"
-    }
-    ,
+    },
+    "config": {
+        "allow-plugins": {
+            "typo3/cms-composer-installers": true
+        }
+    },
     "require-dev": {
         "roave/security-advisories": "dev-latest"
     },
