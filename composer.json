@@ -9,7 +9,7 @@
         "optimization",
         "tinypng"
     ],
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Andreas Reichel",
@@ -22,7 +22,6 @@
             "email": "igor.smertin@web.de"
         }
     ],
-    "version": "1.0.1",
     "require": {
         "php": ">=8.0",
         "typo3/cms-core": "^12.4",
