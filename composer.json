@@ -22,13 +22,6 @@
             "email": "igor.smertin@web.de"
         }
     ],
-    "require": {
-        "php": ">=8.0",
-        "typo3/cms-core": "^12.4",
-        "tinify/tinify": "^1.5.3",
-        "ext-gd": "*",
-        "ext-pdo": "*"
-    },
     "config": {
         "allow-plugins": {
             "typo3/cms-composer-installers": true,
@@ -36,8 +29,16 @@
             "composer/installers": true
         }
     },
+    "require": {
+        "php": ">=8.0",
+        "typo3/cms-core": "^12.4",
+        "tinify/tinify": "^1.5.3",
+        "ext-gd": "*",
+        "ext-pdo": "*"
+    },
     "require-dev": {
-        "roave/security-advisories": "dev-latest"
+        "roave/security-advisories": "dev-latest",
+        "phpunit/phpunit": "^10"
     },
     "autoload": {
         "psr-4": {
