@@ -1,0 +1,8 @@
+meta:
+  title: Tiny PNG
+  description: TYPO3 Extension for automatic image compression using the TinyPNG API
+  author: Andreas Reichel, Igor Smertin
+  license: 'GPL-2.0-or-later'
+  version: '1.0.1'
+  extension-key: twoh_tiny_png
+  repository: 'https://github.com/twohreichel/twoh_tiny_png'
