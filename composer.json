@@ -22,7 +22,12 @@
             "email": "igor.smertin@web.de"
         }
     ],
-    "version": "1.0.2",
+    "version": "1.0.3",
+    "support": {
+        "issues": "https://github.com/twohreichel/twoh_tiny_png/issues",
+        "source": "https://github.com/twohreichel/twoh_tiny_png",
+        "docs": "https://docs.typo3.org/p/twoh/twoh_tiny_png/main/en-us/"
+    },
     "config": {
         "allow-plugins": {
             "typo3/cms-composer-installers": true,
