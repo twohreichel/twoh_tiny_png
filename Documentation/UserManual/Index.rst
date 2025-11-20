@@ -1,5 +1,5 @@
 ============
-User Manual v1.0.1
+User Manual v1.0.3
 ============
 
 .. contents:: Table of Contents

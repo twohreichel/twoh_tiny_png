@@ -88,12 +88,12 @@ jobs:
 
       - name: Create Tag
         run: |
-          git tag "v${{ steps.get_version.outputs.version }}"
-          git push origin "v${{ steps.get_version.outputs.version }}"
+          git tag "${{ steps.get_version.outputs.version }}"
+          git push origin "${{ steps.get_version.outputs.version }}"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: "v${{ steps.get_version.outputs.version }}"
+          tag_name: "${{ steps.get_version.outputs.version }}"
           name: "Release v${{ steps.get_version.outputs.version }}"
           body: ${{ steps.changelog.outputs.log }}
