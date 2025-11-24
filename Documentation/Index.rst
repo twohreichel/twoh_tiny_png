@@ -8,7 +8,7 @@ Tiny PNG Extension Manual
    |extension_key|
 
 :Version:
-   1.0.3
+   1.0.5
 
 :Author:
    |author|
