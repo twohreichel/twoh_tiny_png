@@ -28,7 +28,7 @@ jobs:
         run: composer validate --no-check-version
 
       - name: Install dependencies
-        run: composer install --no-interaction --no-progress --ignore-platform-req=ext-mongodb
+        run: composer install --no-interaction --no-progress
 
       # optional: PHP lint
       - name: PHP Syntax Check
