@@ -24,11 +24,11 @@ class MetaDataUtility
         $path = Environment::getPublicPath() . '/' . 'fileadmin/';
         $files = $bulkService->scanAllDir($path);
 
-        if (count($files) > 0) {
+        if (\count($files) > 0) {
             foreach ($files as $file) {
                 $this->updateMetaData(
                     $path,
-                    $file
+                    $file,
                 );
             }
 
@@ -41,13 +41,11 @@ class MetaDataUtility
     /**
      * @param string $path
      * @param string $file
-     * @return void
      */
     public function updateMetaData(
         string $path,
-        string $file
-    ): void
-    {
+        string $file,
+    ): void {
         $databaseUtility = GeneralUtility::makeInstance(DatabaseUtility::class);
 
         try {
@@ -55,10 +53,10 @@ class MetaDataUtility
 
             if ($sysFile[0]['uid']) {
                 $currentFileDimensions = getimagesize(
-                    $path . $file
+                    $path . $file,
                 );
                 $fileSize = filesize(
-                    $path . $file
+                    $path . $file,
                 );
 
                 $sysFileMetaData = $databaseUtility->findSysFileMetaDataById($sysFile[0]['uid']);
@@ -66,14 +64,14 @@ class MetaDataUtility
                 if ($fileSize) {
                     $databaseUtility->updateSysFile(
                         $sysFile[0]['uid'],
-                        $fileSize
+                        $fileSize,
                     );
                 }
 
                 if ($sysFileMetaData[0]['uid'] > 0 && isset($currentFileDimensions[0]) && isset($currentFileDimensions[1])) {
                     $databaseUtility->updateSysFileMetaData(
                         $sysFileMetaData[0]['uid'],
-                        $currentFileDimensions
+                        $currentFileDimensions,
                     );
                 }
             }

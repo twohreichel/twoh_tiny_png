@@ -12,8 +12,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class BulkService
 {
     /**
-     * @return int
      * @throws Exception
+     * @return int
      */
     public function bulkImages(): int
     {
@@ -38,9 +38,8 @@ class BulkService
      * @return array
      */
     public function scanAllDir(
-        string $dir
-    ): array
-    {
+        string $dir,
+    ): array {
         $result = [];
         foreach (scandir($dir) as $filename) {
             if ($filename[0] === '.') {
@@ -54,7 +53,7 @@ class BulkService
                     }
                 } else {
                     $imageFileType = pathinfo($filename, PATHINFO_EXTENSION);
-                    if ($imageFileType === "jpg" || $imageFileType === "png" || $imageFileType === "jpeg") {
+                    if ($imageFileType === 'jpg' || $imageFileType === 'png' || $imageFileType === 'jpeg') {
                         $result[] = $filename;
                     }
                 }

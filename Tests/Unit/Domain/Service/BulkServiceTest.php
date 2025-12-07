@@ -31,7 +31,9 @@ final class BulkServiceTest extends TestCase
     private function deleteDir(string $dir): void
     {
         foreach (scandir($dir) as $f) {
-            if ($f === '.' || $f === '..') continue;
+            if ($f === '.' || $f === '..') {
+                continue;
+            }
             $path = "$dir/$f";
             is_dir($path) ? $this->deleteDir($path) : unlink($path);
         }

@@ -8,7 +8,6 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
  * Class Tiny
- * @package TWOH\TwohTinyPng\Domain\Model
  */
 class Tiny extends AbstractEntity
 {

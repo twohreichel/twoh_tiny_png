@@ -29,30 +29,29 @@ final class UploadEventListener
 
     /**
      * @param AfterFileCommandProcessedEvent $event
-     * @return void
      * @throws Exception
      */
     public function __invoke(AfterFileCommandProcessedEvent $event): void
     {
-        if (array_key_exists('upload', $event->getCommand())) {
+        if (\array_key_exists('upload', $event->getCommand())) {
             $fileObject = $event->getResult()[0];
 
             if ($fileObject instanceof File) {
                 $tinyPngService = GeneralUtility::makeInstance(TinyPngService::class);
                 if (
-                    $fileObject->getExtension() === 'jpg' ||
-                    $fileObject->getExtension() === 'jpeg' ||
-                    $fileObject->getExtension() === 'png'
+                    $fileObject->getExtension() === 'jpg'
+                    || $fileObject->getExtension() === 'jpeg'
+                    || $fileObject->getExtension() === 'png'
                 ) {
-                   try {
-                       $tinyPngService->imageCompression(
-                           Environment::getPublicPath() . '/' . 'fileadmin',
-                           $fileObject->getIdentifier()
-                       );
-                   } catch (\Exception $e) {
-                       // @extensionScannerIgnoreLine
-                       $this->logger->error($e->getMessage());
-                   }
+                    try {
+                        $tinyPngService->imageCompression(
+                            Environment::getPublicPath() . '/' . 'fileadmin',
+                            $fileObject->getIdentifier(),
+                        );
+                    } catch (\Exception $e) {
+                        // @extensionScannerIgnoreLine
+                        $this->logger->error($e->getMessage());
+                    }
                 }
             }
         }
