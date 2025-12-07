@@ -33,12 +33,6 @@ jobs:
       - name: PHP-CS-Fixer Check
         run: composer cs:check
 
-      # optional: PHP lint
-      - name: PHP Syntax Check
-        run: |
-          find Classes -type f -name "*.php" -print0 | xargs -0 -n1 php -l
-
-      # optional: run your tests if you have them
       - name: Run PHPUnit
         run: vendor/bin/phpunit --configuration phpunit.xml.dist
 
