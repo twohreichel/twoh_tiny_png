@@ -23,7 +23,7 @@
             "email": "igor.smertin@web.de"
         }
     ],
-    "version": "1.0.6",
+    "version": "1.0.7",
     "support": {
         "issues": "https://github.com/twohreichel/twoh_tiny_png/issues",
         "source": "https://github.com/twohreichel/twoh_tiny_png",
@@ -45,7 +45,7 @@
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
-        "phpunit/phpunit": "^10",
+        "phpunit/phpunit": "^11.5",
         "friendsofphp/php-cs-fixer": "^3.91",
         "typo3/testing-framework": "^8.0"
     },
