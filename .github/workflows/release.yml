@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --no-progress
 
+      - name: PHP-CS-Fixer Check
+        run: composer cs:check
+
       # optional: PHP lint
       - name: PHP Syntax Check
         run: |
