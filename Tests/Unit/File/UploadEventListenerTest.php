@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace TWOH\TwohTinyPng\Tests\Unit\File;
 
+use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
+use ReflectionClass;
 use TWOH\TwohTinyPng\Domain\Service\TinyPngService;
 use TWOH\TwohTinyPng\File\UploadEventListener;
 use TYPO3\CMS\Core\Resource\Event\AfterFileCommandProcessedEvent;
@@ -204,7 +206,7 @@ final class UploadEventListenerTest extends UnitTestCase
     #[Test]
     public function invokeLogsExceptionOnError(): void
     {
-        $exception = new \Exception('Compression failed');
+        $exception = new Exception('Compression failed');
 
         $this->fileMock
             ->method('getExtension')
@@ -265,7 +267,7 @@ final class UploadEventListenerTest extends UnitTestCase
     #[Test]
     public function listenerRequiresLoggerInConstructor(): void
     {
-        $reflection = new \ReflectionClass(UploadEventListener::class);
+        $reflection = new ReflectionClass(UploadEventListener::class);
         $constructor = $reflection->getConstructor();
 
         self::assertNotNull($constructor);
@@ -276,7 +278,7 @@ final class UploadEventListenerTest extends UnitTestCase
     #[Test]
     public function listenerIsFinal(): void
     {
-        $reflection = new \ReflectionClass(UploadEventListener::class);
+        $reflection = new ReflectionClass(UploadEventListener::class);
 
         self::assertTrue($reflection->isFinal());
     }
@@ -286,7 +288,7 @@ final class UploadEventListenerTest extends UnitTestCase
     {
         $listener = new UploadEventListener($this->loggerMock);
 
-        self::assertTrue(is_callable($listener));
+        self::assertIsCallable($listener);
     }
 
     #[Test]

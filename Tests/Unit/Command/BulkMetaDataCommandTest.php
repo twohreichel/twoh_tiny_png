@@ -7,6 +7,7 @@ namespace TWOH\TwohTinyPng\Tests\Unit\Command;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -67,7 +68,7 @@ final class BulkMetaDataCommandTest extends UnitTestCase
 
         $command = new BulkMetaDataCommand();
 
-        $reflection = new \ReflectionClass($command);
+        $reflection = new ReflectionClass($command);
         $method = $reflection->getMethod('execute');
         $method->setAccessible(true);
 
@@ -88,7 +89,7 @@ final class BulkMetaDataCommandTest extends UnitTestCase
 
         $command = new BulkMetaDataCommand();
 
-        $reflection = new \ReflectionClass($command);
+        $reflection = new ReflectionClass($command);
         $method = $reflection->getMethod('execute');
         $method->setAccessible(true);
 
@@ -126,7 +127,7 @@ final class BulkMetaDataCommandTest extends UnitTestCase
 
         $command = new BulkMetaDataCommand();
 
-        $reflection = new \ReflectionClass($command);
+        $reflection = new ReflectionClass($command);
         $method = $reflection->getMethod('execute');
         $method->setAccessible(true);
 

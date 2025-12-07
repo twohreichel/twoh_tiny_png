@@ -57,7 +57,7 @@ final class DatabaseUtilityTest extends UnitTestCase
         // Accept any parameters for createNamedParameter - return placeholder
         $this->queryBuilderMock
             ->method('createNamedParameter')
-            ->willReturnCallback(function (mixed $value, mixed $type = ParameterType::STRING): string {
+            ->willReturnCallback(static function (mixed $value, mixed $type = ParameterType::STRING): string {
                 return ':dcValue1';
             });
     }
