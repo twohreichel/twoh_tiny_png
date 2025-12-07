@@ -1,0 +1,37 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# PHP files
+*.php text eol=lf
+
+# TypoScript
+*.typoscript text eol=lf
+*.tsconfig text eol=lf
+
+# ReStructuredText (Documentation)
+*.rst text eol=lf
+
+# YAML
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# XML
+*.xml text eol=lf
+*.xlf text eol=lf
+
+# JSON
+*.json text eol=lf
+
+# Markdown
+*.md text eol=lf
+
+# Shell scripts
+*.sh text eol=lf
+
+# Ignore binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg binary
