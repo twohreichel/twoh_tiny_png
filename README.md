@@ -34,3 +34,18 @@ ignoreImagesByFolderName = {$plugin.tx_twohtinypng.settings.ignoreImagesByFolder
 ````
 ##### File Upload Process
 The Extension hooks into the FileUploadProcess and compress on Upload
+
+## Code Quality
+
+### PHP CS Fixer
+This extension uses PHP CS Fixer for code style enforcement following TYPO3 best practices.
+
+**Auto-fix code style issues:**
+```bash
+composer cs:fix
+```
+
+**Check for code style violations (dry-run):**
+```bash
+composer cs:check
+```

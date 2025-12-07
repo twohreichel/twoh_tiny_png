@@ -38,14 +38,19 @@
     },
     "require": {
         "php": ">=8.0",
-        "typo3/cms-core": "^12.4",
-        "tinify/tinify": "^1.5.3",
+        "typo3/cms-core": "^12.4 || ^13.4",
+        "tinify/tinify": "^1.6.3",
         "ext-gd": "*",
         "ext-pdo": "*"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
-        "phpunit/phpunit": "^10"
+        "phpunit/phpunit": "^10",
+        "friendsofphp/php-cs-fixer": "^3.91"
+    },
+    "scripts": {
+        "cs:fix": "php-cs-fixer fix",
+        "cs:check": "php-cs-fixer fix --dry-run --diff"
     },
     "autoload": {
         "psr-4": {
