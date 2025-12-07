@@ -6,7 +6,7 @@ namespace TWOH\TwohTinyPng\Domain\Utilities;
 
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception;
-use PDO;
+use Doctrine\DBAL\ParameterType;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -21,33 +21,31 @@ class DatabaseUtility
     public function findByIdentifier(
         string $identifier,
     ): bool {
+        if (empty($identifier)) {
+            return false;
+        }
+
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable('tx_twohtinypng_domain_model_tiny');
 
-        if (!empty($identifier)) {
-            $result = $queryBuilder
-                ->select('uid')
-                ->from('tx_twohtinypng_domain_model_tiny')
-                ->where(
-                    $queryBuilder->expr()->eq(
-                        'identifier',
-                        $queryBuilder->createNamedParameter($identifier),
-                    ),
-                    $queryBuilder->expr()->eq(
-                        'deleted',
-                        $queryBuilder->createNamedParameter(0, PDO::PARAM_INT),
-                    ),
-                )
-                ->executeQuery();
+        $result = $queryBuilder
+            ->select('uid')
+            ->from('tx_twohtinypng_domain_model_tiny')
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'identifier',
+                    $queryBuilder->createNamedParameter($identifier),
+                ),
+                $queryBuilder->expr()->eq(
+                    'deleted',
+                    $queryBuilder->createNamedParameter(0, ParameterType::INTEGER),
+                ),
+            )
+            ->executeQuery();
 
-            $count = $result->fetchAllAssociative();
+        $count = $result->fetchAllAssociative();
 
-            if (\count($count) === 0) {
-                return true;
-            }
-        }
-
-        return false;
+        return \count($count) === 0;
     }
 
     /**
@@ -59,25 +57,25 @@ class DatabaseUtility
     public function findSysFileByIdentifier(
         string $identifier,
     ): array {
+        if (empty($identifier)) {
+            return [];
+        }
+
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable('sys_file');
 
-        if (!empty($identifier)) {
-            $result = $queryBuilder
-                ->select('*')
-                ->from('sys_file')
-                ->where(
-                    $queryBuilder->expr()->like(
-                        'identifier',
-                        $queryBuilder->createNamedParameter('%' . $queryBuilder->escapeLikeWildcards($identifier) . '%'),
-                    ),
-                )
-                ->executeQuery();
+        $result = $queryBuilder
+            ->select('*')
+            ->from('sys_file')
+            ->where(
+                $queryBuilder->expr()->like(
+                    'identifier',
+                    $queryBuilder->createNamedParameter('%' . $queryBuilder->escapeLikeWildcards($identifier) . '%'),
+                ),
+            )
+            ->executeQuery();
 
-            return $result->fetchAllAssociative();
-        }
-
-        return [];
+        return $result->fetchAllAssociative();
     }
 
     /**
@@ -89,28 +87,28 @@ class DatabaseUtility
     public function findSysFileMetaDataById(
         int $id,
     ): array {
+        if (empty($id)) {
+            return [];
+        }
+
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable('sys_file_metadata');
 
-        if (!empty($id)) {
-            $result = $queryBuilder
-                ->select('*')
-                ->from('sys_file_metadata')
-                ->where(
-                    $queryBuilder->expr()->eq(
-                        'file',
-                        $queryBuilder->createNamedParameter(
-                            $id,
-                            PDO::PARAM_INT,
-                        ),
+        $result = $queryBuilder
+            ->select('*')
+            ->from('sys_file_metadata')
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'file',
+                    $queryBuilder->createNamedParameter(
+                        $id,
+                        ParameterType::INTEGER,
                     ),
-                )
-                ->executeQuery();
+                ),
+            )
+            ->executeQuery();
 
-            return $result->fetchAllAssociative();
-        }
-
-        return [];
+        return $result->fetchAllAssociative();
     }
 
     /**
@@ -148,7 +146,7 @@ class DatabaseUtility
                     'uid',
                     $queryBuilder->createNamedParameter(
                         $uid,
-                        PDO::PARAM_INT,
+                        ParameterType::INTEGER,
                     ),
                 ),
             )
@@ -177,7 +175,7 @@ class DatabaseUtility
                     'uid',
                     $queryBuilder->createNamedParameter(
                         $uid,
-                        PDO::PARAM_INT,
+                        ParameterType::INTEGER,
                     ),
                 ),
             )

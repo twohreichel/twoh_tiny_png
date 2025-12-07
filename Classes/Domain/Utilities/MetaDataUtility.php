@@ -51,31 +51,32 @@ class MetaDataUtility
         try {
             $sysFile = $databaseUtility->findSysFileByIdentifier($file);
 
-            if ($sysFile[0]['uid']) {
-                $currentFileDimensions = getimagesize(
-                    $path . $file,
+            if (!isset($sysFile[0]['uid']) || empty($sysFile[0]['uid'])) {
+                return;
+            }
+
+            $uid = (int)$sysFile[0]['uid'];
+            $currentFileDimensions = getimagesize($path . $file);
+            $fileSize = filesize($path . $file);
+
+            if ($fileSize) {
+                $databaseUtility->updateSysFile($uid, $fileSize);
+            }
+
+            $sysFileMetaData = $databaseUtility->findSysFileMetaDataById($uid);
+
+            if (
+                isset($sysFileMetaData[0]['uid'])
+                && $sysFileMetaData[0]['uid'] > 0
+                && isset($currentFileDimensions[0], $currentFileDimensions[1])
+            ) {
+                $databaseUtility->updateSysFileMetaData(
+                    (int)$sysFileMetaData[0]['uid'],
+                    $currentFileDimensions,
                 );
-                $fileSize = filesize(
-                    $path . $file,
-                );
-
-                $sysFileMetaData = $databaseUtility->findSysFileMetaDataById($sysFile[0]['uid']);
-
-                if ($fileSize) {
-                    $databaseUtility->updateSysFile(
-                        $sysFile[0]['uid'],
-                        $fileSize,
-                    );
-                }
-
-                if ($sysFileMetaData[0]['uid'] > 0 && isset($currentFileDimensions[0]) && isset($currentFileDimensions[1])) {
-                    $databaseUtility->updateSysFileMetaData(
-                        $sysFileMetaData[0]['uid'],
-                        $currentFileDimensions,
-                    );
-                }
             }
         } catch (DBALException|Exception $e) {
+            // Silently catch database exceptions
         }
     }
 }
