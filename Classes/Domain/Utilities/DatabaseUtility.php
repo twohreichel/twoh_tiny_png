@@ -6,6 +6,7 @@ namespace TWOH\TwohTinyPng\Domain\Utilities;
 
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception;
+use Doctrine\DBAL\ParameterType;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -13,117 +14,110 @@ class DatabaseUtility
 {
     /**
      * @param string $identifier
-     * @return bool
      * @throws DBALException
      * @throws Exception
+     * @return bool
      */
     public function findByIdentifier(
-        string $identifier
-    ): bool
-    {
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
-            ->getQueryBuilderForTable('tx_twohtinypng_domain_model_tiny');
-        
-        if (!empty($identifier)) {
-            $result = $queryBuilder
-                ->select('uid')
-                ->from('tx_twohtinypng_domain_model_tiny')
-                ->where(
-                    $queryBuilder->expr()->eq(
-                        'identifier',
-                        $queryBuilder->createNamedParameter($identifier)
-                    ),
-                    $queryBuilder->expr()->eq(
-                        'deleted',
-                        $queryBuilder->createNamedParameter(0, \PDO::PARAM_INT)
-                    )
-                )
-                ->executeQuery();
-
-            $count = $result->fetchAllAssociative();
-
-            if (count($count) === 0) {
-                return true;
-            }
+        string $identifier,
+    ): bool {
+        if (empty($identifier)) {
+            return false;
         }
 
-        return false;
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable('tx_twohtinypng_domain_model_tiny');
+
+        $result = $queryBuilder
+            ->select('uid')
+            ->from('tx_twohtinypng_domain_model_tiny')
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'identifier',
+                    $queryBuilder->createNamedParameter($identifier),
+                ),
+                $queryBuilder->expr()->eq(
+                    'deleted',
+                    $queryBuilder->createNamedParameter(0, ParameterType::INTEGER),
+                ),
+            )
+            ->executeQuery();
+
+        $count = $result->fetchAllAssociative();
+
+        return \count($count) === 0;
     }
 
     /**
      * @param string $identifier
-     * @return array
      * @throws DBALException
      * @throws Exception
+     * @return array
      */
     public function findSysFileByIdentifier(
-        string $identifier
-    ): array
-    {
+        string $identifier,
+    ): array {
+        if (empty($identifier)) {
+            return [];
+        }
+
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable('sys_file');
 
-        if (!empty($identifier)) {
-            $result = $queryBuilder
-                ->select('*')
-                ->from('sys_file')
-                ->where(
-                    $queryBuilder->expr()->like(
-                        'identifier',
-                        $queryBuilder->createNamedParameter('%' . $queryBuilder->escapeLikeWildcards($identifier) . '%')
-                    )
-                )
-                ->executeQuery();
+        $result = $queryBuilder
+            ->select('*')
+            ->from('sys_file')
+            ->where(
+                $queryBuilder->expr()->like(
+                    'identifier',
+                    $queryBuilder->createNamedParameter('%' . $queryBuilder->escapeLikeWildcards($identifier) . '%'),
+                ),
+            )
+            ->executeQuery();
 
-            return $result->fetchAllAssociative();
-        }
-
-        return [];
+        return $result->fetchAllAssociative();
     }
 
     /**
      * @param int $id
-     * @return array
      * @throws DBALException
      * @throws Exception
+     * @return array
      */
     public function findSysFileMetaDataById(
-        int $id
-    ): array
-    {
+        int $id,
+    ): array {
+        if (empty($id)) {
+            return [];
+        }
+
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable('sys_file_metadata');
 
-        if (!empty($id)) {
-            $result = $queryBuilder
-                ->select('*')
-                ->from('sys_file_metadata')
-                ->where(
-                    $queryBuilder->expr()->eq(
-                        'file',
-                        $queryBuilder->createNamedParameter(
-                            $id,
-                            \PDO::PARAM_INT
-                        )
-                    )
-                )
-                ->executeQuery();
+        $result = $queryBuilder
+            ->select('*')
+            ->from('sys_file_metadata')
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'file',
+                    $queryBuilder->createNamedParameter(
+                        $id,
+                        ParameterType::INTEGER,
+                    ),
+                ),
+            )
+            ->executeQuery();
 
-            return $result->fetchAllAssociative();
-        }
-
-        return [];
+        return $result->fetchAllAssociative();
     }
 
     /**
      * @param array $tinyPngArray
-     * @return void
      * @throws DBALException
      */
     public function add(
-        array $tinyPngArray
-    ): void
-    {
+        array $tinyPngArray,
+    ): void {
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable('tx_twohtinypng_domain_model_tiny');
         $queryBuilder
@@ -135,14 +129,12 @@ class DatabaseUtility
     /**
      * @param int $uid
      * @param int $fileSize
-     * @return void
      * @throws DBALException
      */
     public function updateSysFile(
         int $uid,
-        int $fileSize
-    ): void
-    {
+        int $fileSize,
+    ): void {
         // sys_file
         // size: $fileSize
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
@@ -154,9 +146,9 @@ class DatabaseUtility
                     'uid',
                     $queryBuilder->createNamedParameter(
                         $uid,
-                        \PDO::PARAM_INT
-                    )
-                )
+                        ParameterType::INTEGER,
+                    ),
+                ),
             )
             ->set('size', $fileSize)
             ->executeStatement();
@@ -165,14 +157,12 @@ class DatabaseUtility
     /**
      * @param int $uid
      * @param array $currentFileDimensions
-     * @return void
      * @throws DBALException
      */
     public function updateSysFileMetaData(
         int $uid,
-        array $currentFileDimensions
-    ): void
-    {
+        array $currentFileDimensions,
+    ): void {
         // sys_file_metadata
         // width: $currentFileDimensions[0]
         // height: $currentFileDimensions[1]
@@ -185,9 +175,9 @@ class DatabaseUtility
                     'uid',
                     $queryBuilder->createNamedParameter(
                         $uid,
-                        \PDO::PARAM_INT
-                    )
-                )
+                        ParameterType::INTEGER,
+                    ),
+                ),
             )
             ->set('width', $currentFileDimensions[0])
             ->set('height', $currentFileDimensions[1])

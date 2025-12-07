@@ -8,15 +8,9 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
  * Class Tiny
- * @package TWOH\TwohTinyPng\Domain\Model
  */
 class Tiny extends AbstractEntity
 {
-    /**
-     * @var int
-     */
-    protected $pid = 0;
-
     /**
      * @var string
      */
@@ -36,14 +30,6 @@ class Tiny extends AbstractEntity
      * @var string
      */
     protected string $height = '';
-
-    /**
-     * @return int
-     */
-    public function getPid(): int
-    {
-        return $this->pid;
-    }
 
     /**
      * @return string

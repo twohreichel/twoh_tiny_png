@@ -1,10 +1,52 @@
-.idea
-config.codekit
+# IDE & Editors
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.project
+.settings/
+*.swp
+*.swo
+*~
+
+# macOS
 .DS_Store
-.codekit-cache
-.htpasswd
-**/.sass-cache
-**/.sass-cache/*
-node*
-/vendor
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Composer
+/vendor/
 composer.lock
+
+# PHP CS Fixer
+.php-cs-fixer.cache
+
+# PHPUnit
+.phpunit.result.cache
+.phpunit.cache/
+
+# TYPO3
+/public/
+/var/
+/config/
+*.log
+
+# Build & Node
+node_modules/
+/Build/
+
+# Legacy tools
+config.codekit
+.codekit-cache
+**/.sass-cache/
+
+# Security
+.htpasswd
+.env
+.env.local

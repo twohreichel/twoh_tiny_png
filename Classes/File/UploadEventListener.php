@@ -29,32 +29,39 @@ final class UploadEventListener
 
     /**
      * @param AfterFileCommandProcessedEvent $event
-     * @return void
      * @throws Exception
      */
     public function __invoke(AfterFileCommandProcessedEvent $event): void
     {
-        if (array_key_exists('upload', $event->getCommand())) {
-            $fileObject = $event->getResult()[0];
+        if (!\array_key_exists('upload', $event->getCommand())) {
+            return;
+        }
 
-            if ($fileObject instanceof File) {
-                $tinyPngService = GeneralUtility::makeInstance(TinyPngService::class);
-                if (
-                    $fileObject->getExtension() === 'jpg' ||
-                    $fileObject->getExtension() === 'jpeg' ||
-                    $fileObject->getExtension() === 'png'
-                ) {
-                   try {
-                       $tinyPngService->imageCompression(
-                           Environment::getPublicPath() . '/' . 'fileadmin',
-                           $fileObject->getIdentifier()
-                       );
-                   } catch (\Exception $e) {
-                       // @extensionScannerIgnoreLine
-                       $this->logger->error($e->getMessage());
-                   }
-                }
-            }
+        $result = $event->getResult();
+        if (!\is_array($result) || !isset($result[0])) {
+            return;
+        }
+
+        $fileObject = $result[0];
+
+        if (!$fileObject instanceof File) {
+            return;
+        }
+
+        $extension = $fileObject->getExtension();
+        if ($extension !== 'jpg' && $extension !== 'jpeg' && $extension !== 'png') {
+            return;
+        }
+
+        try {
+            $tinyPngService = GeneralUtility::makeInstance(TinyPngService::class);
+            $tinyPngService->imageCompression(
+                Environment::getPublicPath() . '/' . 'fileadmin',
+                $fileObject->getIdentifier(),
+            );
+        } catch (\Exception $e) {
+            // @extensionScannerIgnoreLine
+            $this->logger->error($e->getMessage());
         }
     }
 }

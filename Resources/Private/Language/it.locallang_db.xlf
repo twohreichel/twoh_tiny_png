@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2019-01-16T15:35:53Z" product-name="tinypng" target-language="it">
+		<header/>
+		<body>
+			<trans-unit id="imageManipulation.desktop">
+				<target>Desktop</target>
+			</trans-unit>
+			<trans-unit id="imageManipulation.landscape">
+				<target>Orizzontale</target>
+			</trans-unit>
+			<trans-unit id="imageManipulation.tablet">
+				<target>Tablet</target>
+			</trans-unit>
+			<trans-unit id="imageManipulation.mobile">
+				<target>Mobile</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

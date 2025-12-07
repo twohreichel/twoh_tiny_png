@@ -7,21 +7,23 @@ namespace TWOH\TwohTinyPng\Domain\Service;
 use Doctrine\DBAL\Driver\Exception;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use RuntimeException;
+use Throwable;
 use Tinify\AccountException;
 use TWOH\TwohTinyPng\Domain\Utilities\DatabaseUtility;
+
 use TWOH\TwohTinyPng\Domain\Utilities\MetaDataUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
+
 use function Tinify\fromFile;
 use function Tinify\setKey;
 use function Tinify\validate;
 
 /**
  * Class TinyPngService
- * @package TWOH\TwohTinyPng\Domain\Service
  */
 class TinyPngService implements LoggerAwareInterface
 {
@@ -56,15 +58,15 @@ class TinyPngService implements LoggerAwareInterface
     }
 
     /**
-     * @return mixed
      * @throws InvalidConfigurationTypeException
+     * @return mixed
      */
     public function getTsSetup(): mixed
     {
         $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
         $settings = $configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT,
-            'twoh_tiny_png'
+            'twoh_tiny_png',
         );
         return $settings['plugin.']['tx_twohtinypng.']['settings.'];
     }
@@ -77,7 +79,7 @@ class TinyPngService implements LoggerAwareInterface
 
         $apiKey = $this->args['apiKey'] ?? '';
         if ($apiKey === '') {
-            throw new \RuntimeException('TinyPNG API key is not configured');
+            throw new RuntimeException('TinyPNG API key is not configured');
         }
         setKey($apiKey);
         validate();
@@ -92,15 +94,14 @@ class TinyPngService implements LoggerAwareInterface
      */
     public function imageCompression(
         string $path,
-        string $img
-    ): void
-    {
+        string $img,
+    ): void {
         $this->ensureTinifyReady();
         $folderAllowed = true;
 
         if ($this->args['ignoreImagesByFolderName']) {
             $ignoreImagesByFolderNames = explode(',', $this->args['ignoreImagesByFolderName']);
-            if (count($ignoreImagesByFolderNames) > 0) {
+            if (\count($ignoreImagesByFolderNames) > 0) {
                 foreach ($ignoreImagesByFolderNames as $ignoreImagesByFolderName) {
                     if (str_contains($img, trim($ignoreImagesByFolderName))) {
                         $folderAllowed = false;
@@ -117,13 +118,13 @@ class TinyPngService implements LoggerAwareInterface
                 if ($this->databaseUtility->findByIdentifier($img)) {
                     $source = fromFile($path . $img);
                     $resized = $source->resize([
-                        "method" => "scale",
-                        "width" => (int) $width
+                        'method' => 'scale',
+                        'width' => (int)$width,
                     ]);
 
                     $tinyModel = [];
-                    $tinyModel['dimension'] = (int) $width;
-                    $tinyModel['pid'] = (int) $pid;
+                    $tinyModel['dimension'] = (int)$width;
+                    $tinyModel['pid'] = (int)$pid;
                     $tinyModel['identifier'] = $img;
 
                     $compressedFile = $resized->toFile($path . $img);
@@ -134,11 +135,11 @@ class TinyPngService implements LoggerAwareInterface
                         // update meta values
                         $this->metaDataUtility->updateMetaData(
                             $path,
-                            $img
+                            $img,
                         );
                     }
                 }
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // @extensionScannerIgnoreLine
                 if ($this->logger !==  null) {
                     $this->logger->error($e->getMessage());

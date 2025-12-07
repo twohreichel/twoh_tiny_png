@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2025-12-07T12:00:00Z" product-name="twoh_tiny_png" target-language="ru">
+		<header/>
+		<body>
+			<trans-unit id="tx_twohtinypng_domain_model_tiny">
+				<target>Сжатие TinyPNG</target>
+			</trans-unit>
+			<trans-unit id="identifier">
+				<target>Идентификатор</target>
+			</trans-unit>
+			<trans-unit id="dimension">
+				<target>Размер</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
