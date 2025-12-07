@@ -3,6 +3,7 @@
 > Optimize your TYPO3 images automatically using the TinyPNG API
 
 [![TYPO3 12](https://img.shields.io/badge/TYPO3-12-orange.svg)](https://get.typo3.org/version/12)
+[![TYPO3 13](https://img.shields.io/badge/TYPO3-13-green.svg)](https://get.typo3.org/version/13)
 [![PHP 8.x](https://img.shields.io/badge/PHP-8.x-blue.svg)](https://www.php.net/)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/gpl-2.0)
 
