@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TWOH\TwohTinyPng\Tests\Unit\Domain\Utilities;
 
+use Doctrine\DBAL\Driver\Exception as DriverException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -178,11 +179,14 @@ final class MetaDataUtilityTest extends UnitTestCase
     }
 
     #[Test]
-    public function updateMetaDataHandlesDBALExceptionGracefully(): void
+    public function updateMetaDataHandlesDriverExceptionGracefully(): void
     {
+        // Create a mock that implements DriverException interface
+        $exceptionMock = $this->createMock(DriverException::class);
+
         $this->databaseUtilityMock
             ->method('findSysFileByIdentifier')
-            ->willThrowException(new \Doctrine\DBAL\Exception\InvalidArgumentException('Database error'));
+            ->willThrowException($exceptionMock);
 
         GeneralUtility::addInstance(DatabaseUtility::class, $this->databaseUtilityMock);
 
@@ -207,6 +211,42 @@ final class MetaDataUtilityTest extends UnitTestCase
         GeneralUtility::addInstance(DatabaseUtility::class, $this->databaseUtilityMock);
 
         // Should not throw exception
+        $utility = new MetaDataUtility();
+        $utility->updateMetaData('/var/www/html/fileadmin/', 'test/image.jpg');
+
+        self::assertTrue(true);
+    }
+
+    #[Test]
+    public function updateMetaDataHandlesZeroUid(): void
+    {
+        $sysFileData = [
+            ['uid' => 0, 'identifier' => '/fileadmin/test.jpg'],
+        ];
+
+        $this->databaseUtilityMock
+            ->method('findSysFileByIdentifier')
+            ->willReturn($sysFileData);
+
+        GeneralUtility::addInstance(DatabaseUtility::class, $this->databaseUtilityMock);
+
+        // Should not throw exception
+        $utility = new MetaDataUtility();
+        $utility->updateMetaData('/var/www/html/fileadmin/', 'test/image.jpg');
+
+        self::assertTrue(true);
+    }
+
+    #[Test]
+    public function updateMetaDataHandlesEmptySysFileResult(): void
+    {
+        $this->databaseUtilityMock
+            ->method('findSysFileByIdentifier')
+            ->willReturn([]);
+
+        GeneralUtility::addInstance(DatabaseUtility::class, $this->databaseUtilityMock);
+
+        // Should not throw exception - empty result is handled
         $utility = new MetaDataUtility();
         $utility->updateMetaData('/var/www/html/fileadmin/', 'test/image.jpg');
 

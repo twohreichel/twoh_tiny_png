@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TWOH\TwohTinyPng\Tests\Unit\Domain\Utilities;
 
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Result;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -53,9 +54,10 @@ final class DatabaseUtilityTest extends UnitTestCase
             ->method('expr')
             ->willReturn($this->expressionBuilderMock);
 
+        // Accept any parameters for createNamedParameter - return placeholder
         $this->queryBuilderMock
             ->method('createNamedParameter')
-            ->willReturnCallback(function ($value, $type = null) {
+            ->willReturnCallback(function (mixed $value, mixed $type = ParameterType::STRING): string {
                 return ':dcValue1';
             });
     }
@@ -245,6 +247,9 @@ final class DatabaseUtilityTest extends UnitTestCase
         self::assertTrue($result);
     }
 
+    /**
+     * @return array<string, array{0: string}>
+     */
     public static function validIdentifierDataProvider(): array
     {
         return [
@@ -273,5 +278,38 @@ final class DatabaseUtilityTest extends UnitTestCase
         $result = $utility->findByIdentifier('test/image.jpg');
 
         self::assertFalse($result);
+    }
+
+    #[Test]
+    public function findByIdentifierReturnsFalseForEmptyIdentifier(): void
+    {
+        // findByIdentifier checks if identifier is empty at the start
+        // and returns false without calling the database
+        $utility = new DatabaseUtility();
+        $result = $utility->findByIdentifier('');
+
+        self::assertFalse($result);
+    }
+
+    #[Test]
+    public function findSysFileByIdentifierReturnsEmptyArrayForEmptyIdentifier(): void
+    {
+        // findSysFileByIdentifier checks if identifier is empty at the start
+        // and returns an empty array without calling the database
+        $utility = new DatabaseUtility();
+        $result = $utility->findSysFileByIdentifier('');
+
+        self::assertSame([], $result);
+    }
+
+    #[Test]
+    public function findSysFileMetaDataByIdReturnsEmptyArrayForZeroId(): void
+    {
+        // findSysFileMetaDataById checks if id is empty at the start
+        // and returns an empty array without calling the database
+        $utility = new DatabaseUtility();
+        $result = $utility->findSysFileMetaDataById(0);
+
+        self::assertSame([], $result);
     }
 }

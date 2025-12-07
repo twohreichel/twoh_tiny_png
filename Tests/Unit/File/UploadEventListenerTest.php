@@ -23,7 +23,6 @@ final class UploadEventListenerTest extends UnitTestCase
 
     private MockObject&LoggerInterface $loggerMock;
     private MockObject&TinyPngService $tinyPngServiceMock;
-    private MockObject&AfterFileCommandProcessedEvent $eventMock;
     private MockObject&File $fileMock;
 
     protected function setUp(): void
@@ -32,7 +31,6 @@ final class UploadEventListenerTest extends UnitTestCase
 
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->tinyPngServiceMock = $this->createMock(TinyPngService::class);
-        $this->eventMock = $this->createMock(AfterFileCommandProcessedEvent::class);
         $this->fileMock = $this->createMock(File::class);
     }
 
@@ -40,6 +38,15 @@ final class UploadEventListenerTest extends UnitTestCase
     {
         GeneralUtility::purgeInstances();
         parent::tearDown();
+    }
+
+    /**
+     * Create a real AfterFileCommandProcessedEvent instance since it's a final class
+     * The constructor requires: array $command, mixed $result, string $conflictMode
+     */
+    private function createEvent(array $command, mixed $result, string $conflictMode = ''): AfterFileCommandProcessedEvent
+    {
+        return new AfterFileCommandProcessedEvent($command, $result, $conflictMode);
     }
 
     #[Test]
@@ -53,16 +60,14 @@ final class UploadEventListenerTest extends UnitTestCase
     #[Test]
     public function invokeSkipsNonUploadCommands(): void
     {
-        $this->eventMock
-            ->method('getCommand')
-            ->willReturn(['copy' => []]);
+        $event = $this->createEvent(['copy' => []], null);
 
         $this->tinyPngServiceMock
             ->expects(self::never())
             ->method('imageCompression');
 
         $listener = new UploadEventListener($this->loggerMock);
-        $listener($this->eventMock);
+        $listener($event);
 
         self::assertTrue(true);
     }
@@ -70,10 +75,6 @@ final class UploadEventListenerTest extends UnitTestCase
     #[Test]
     public function invokeProcessesUploadCommand(): void
     {
-        $this->eventMock
-            ->method('getCommand')
-            ->willReturn(['upload' => []]);
-
         $this->fileMock
             ->method('getExtension')
             ->willReturn('jpg');
@@ -82,9 +83,7 @@ final class UploadEventListenerTest extends UnitTestCase
             ->method('getIdentifier')
             ->willReturn('/user_upload/image.jpg');
 
-        $this->eventMock
-            ->method('getResult')
-            ->willReturn([$this->fileMock]);
+        $event = $this->createEvent(['upload' => []], [$this->fileMock]);
 
         $this->tinyPngServiceMock
             ->expects(self::once())
@@ -93,7 +92,7 @@ final class UploadEventListenerTest extends UnitTestCase
         GeneralUtility::addInstance(TinyPngService::class, $this->tinyPngServiceMock);
 
         $listener = new UploadEventListener($this->loggerMock);
-        $listener($this->eventMock);
+        $listener($event);
 
         self::assertTrue(true);
     }
@@ -102,10 +101,6 @@ final class UploadEventListenerTest extends UnitTestCase
     #[DataProvider('supportedImageExtensionDataProvider')]
     public function invokeProcessesSupportedImageExtensions(string $extension): void
     {
-        $this->eventMock
-            ->method('getCommand')
-            ->willReturn(['upload' => []]);
-
         $this->fileMock
             ->method('getExtension')
             ->willReturn($extension);
@@ -114,9 +109,7 @@ final class UploadEventListenerTest extends UnitTestCase
             ->method('getIdentifier')
             ->willReturn('/user_upload/image.' . $extension);
 
-        $this->eventMock
-            ->method('getResult')
-            ->willReturn([$this->fileMock]);
+        $event = $this->createEvent(['upload' => []], [$this->fileMock]);
 
         $this->tinyPngServiceMock
             ->expects(self::once())
@@ -125,7 +118,7 @@ final class UploadEventListenerTest extends UnitTestCase
         GeneralUtility::addInstance(TinyPngService::class, $this->tinyPngServiceMock);
 
         $listener = new UploadEventListener($this->loggerMock);
-        $listener($this->eventMock);
+        $listener($event);
 
         self::assertTrue(true);
     }
@@ -146,24 +139,18 @@ final class UploadEventListenerTest extends UnitTestCase
     #[DataProvider('unsupportedImageExtensionDataProvider')]
     public function invokeSkipsUnsupportedImageExtensions(string $extension): void
     {
-        $this->eventMock
-            ->method('getCommand')
-            ->willReturn(['upload' => []]);
-
         $this->fileMock
             ->method('getExtension')
             ->willReturn($extension);
 
-        $this->eventMock
-            ->method('getResult')
-            ->willReturn([$this->fileMock]);
+        $event = $this->createEvent(['upload' => []], [$this->fileMock]);
 
         $this->tinyPngServiceMock
             ->expects(self::never())
             ->method('imageCompression');
 
         $listener = new UploadEventListener($this->loggerMock);
-        $listener($this->eventMock);
+        $listener($event);
 
         self::assertTrue(true);
     }
@@ -187,20 +174,14 @@ final class UploadEventListenerTest extends UnitTestCase
     #[Test]
     public function invokeHandlesNonFileResult(): void
     {
-        $this->eventMock
-            ->method('getCommand')
-            ->willReturn(['upload' => []]);
-
-        $this->eventMock
-            ->method('getResult')
-            ->willReturn(['not a file object']);
+        $event = $this->createEvent(['upload' => []], ['not a file object']);
 
         $this->tinyPngServiceMock
             ->expects(self::never())
             ->method('imageCompression');
 
         $listener = new UploadEventListener($this->loggerMock);
-        $listener($this->eventMock);
+        $listener($event);
 
         self::assertTrue(true);
     }
@@ -208,20 +189,14 @@ final class UploadEventListenerTest extends UnitTestCase
     #[Test]
     public function invokeHandlesEmptyResult(): void
     {
-        $this->eventMock
-            ->method('getCommand')
-            ->willReturn(['upload' => []]);
-
-        $this->eventMock
-            ->method('getResult')
-            ->willReturn([]);
+        $event = $this->createEvent(['upload' => []], []);
 
         $this->tinyPngServiceMock
             ->expects(self::never())
             ->method('imageCompression');
 
         $listener = new UploadEventListener($this->loggerMock);
-        $listener($this->eventMock);
+        $listener($event);
 
         self::assertTrue(true);
     }
@@ -231,10 +206,6 @@ final class UploadEventListenerTest extends UnitTestCase
     {
         $exception = new \Exception('Compression failed');
 
-        $this->eventMock
-            ->method('getCommand')
-            ->willReturn(['upload' => []]);
-
         $this->fileMock
             ->method('getExtension')
             ->willReturn('jpg');
@@ -243,9 +214,7 @@ final class UploadEventListenerTest extends UnitTestCase
             ->method('getIdentifier')
             ->willReturn('/user_upload/image.jpg');
 
-        $this->eventMock
-            ->method('getResult')
-            ->willReturn([$this->fileMock]);
+        $event = $this->createEvent(['upload' => []], [$this->fileMock]);
 
         $this->tinyPngServiceMock
             ->method('imageCompression')
@@ -259,7 +228,7 @@ final class UploadEventListenerTest extends UnitTestCase
         GeneralUtility::addInstance(TinyPngService::class, $this->tinyPngServiceMock);
 
         $listener = new UploadEventListener($this->loggerMock);
-        $listener($this->eventMock);
+        $listener($event);
 
         self::assertTrue(true);
     }
@@ -267,10 +236,6 @@ final class UploadEventListenerTest extends UnitTestCase
     #[Test]
     public function invokeUsesCorrectPath(): void
     {
-        $this->eventMock
-            ->method('getCommand')
-            ->willReturn(['upload' => []]);
-
         $this->fileMock
             ->method('getExtension')
             ->willReturn('png');
@@ -279,9 +244,7 @@ final class UploadEventListenerTest extends UnitTestCase
             ->method('getIdentifier')
             ->willReturn('/gallery/2024/photo.png');
 
-        $this->eventMock
-            ->method('getResult')
-            ->willReturn([$this->fileMock]);
+        $event = $this->createEvent(['upload' => []], [$this->fileMock]);
 
         $this->tinyPngServiceMock
             ->expects(self::once())
@@ -294,7 +257,7 @@ final class UploadEventListenerTest extends UnitTestCase
         GeneralUtility::addInstance(TinyPngService::class, $this->tinyPngServiceMock);
 
         $listener = new UploadEventListener($this->loggerMock);
-        $listener($this->eventMock);
+        $listener($event);
 
         self::assertTrue(true);
     }
@@ -324,5 +287,22 @@ final class UploadEventListenerTest extends UnitTestCase
         $listener = new UploadEventListener($this->loggerMock);
 
         self::assertTrue(is_callable($listener));
+    }
+
+    #[Test]
+    public function invokeHandlesNullResultGracefully(): void
+    {
+        $event = $this->createEvent(['upload' => []], null);
+
+        $this->tinyPngServiceMock
+            ->expects(self::never())
+            ->method('imageCompression');
+
+        $listener = new UploadEventListener($this->loggerMock);
+
+        // Should not throw an exception
+        $listener($event);
+
+        self::assertTrue(true);
     }
 }
