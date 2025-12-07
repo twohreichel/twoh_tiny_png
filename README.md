@@ -13,9 +13,10 @@
 
 | Requirement | Version |
 |-------------|---------|
-| PHP         | >= 8.0  |
+| PHP         | >= 8.1  |
 | Composer    | >= 2.4  |
 | TYPO3       | 12.x    |
+| TYPO3       | 13.x    |
 
 ---
 
