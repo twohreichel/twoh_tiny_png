@@ -1,13 +1,14 @@
 {
     "name": "twoh/twoh_tiny_png",
     "type": "typo3-cms-extension",
-    "description": "Optimize your TYPO3 Images",
+    "description": "Optimize your TYPO3 Images using the TinyPNG API",
     "keywords": [
         "TYPO3",
         "extension",
         "image",
         "optimization",
-        "tinypng"
+        "tinypng",
+        "bulk"
     ],
     "license": "GPL-2.0-or-later",
     "authors": [
@@ -22,7 +23,7 @@
             "email": "igor.smertin@web.de"
         }
     ],
-    "version": "1.0.5",
+    "version": "1.0.6",
     "support": {
         "issues": "https://github.com/twohreichel/twoh_tiny_png/issues",
         "source": "https://github.com/twohreichel/twoh_tiny_png",
