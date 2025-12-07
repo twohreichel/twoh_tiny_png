@@ -7,17 +7,19 @@ namespace TWOH\TwohTinyPng\Tests\Unit\Command;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use TWOH\TwohTinyPng\Command\BulkMetaDataCommand;
 use TWOH\TwohTinyPng\Domain\Utilities\MetaDataUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 #[CoversClass(BulkMetaDataCommand::class)]
-final class BulkMetaDataCommandTest extends TestCase
+final class BulkMetaDataCommandTest extends UnitTestCase
 {
+    protected bool $resetSingletonInstances = true;
+
     private MockObject&MetaDataUtility $metaDataUtilityMock;
     private MockObject&InputInterface $inputMock;
     private MockObject&OutputInterface $outputMock;

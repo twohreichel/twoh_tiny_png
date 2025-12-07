@@ -7,16 +7,18 @@ namespace TWOH\TwohTinyPng\Tests\Unit\Domain\Utilities;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use TWOH\TwohTinyPng\Domain\Service\BulkService;
 use TWOH\TwohTinyPng\Domain\Utilities\DatabaseUtility;
 use TWOH\TwohTinyPng\Domain\Utilities\MetaDataUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 #[CoversClass(MetaDataUtility::class)]
-final class MetaDataUtilityTest extends TestCase
+final class MetaDataUtilityTest extends UnitTestCase
 {
+    protected bool $resetSingletonInstances = true;
+
     private MockObject&BulkService $bulkServiceMock;
     private MockObject&DatabaseUtility $databaseUtilityMock;
     private string $tempDir;
@@ -176,11 +178,11 @@ final class MetaDataUtilityTest extends TestCase
     }
 
     #[Test]
-    public function updateMetaDataHandlesDatabaseException(): void
+    public function updateMetaDataHandlesDBALExceptionGracefully(): void
     {
         $this->databaseUtilityMock
             ->method('findSysFileByIdentifier')
-            ->willThrowException(new \Doctrine\DBAL\DBALException('Database error'));
+            ->willThrowException(new \Doctrine\DBAL\Exception\InvalidArgumentException('Database error'));
 
         GeneralUtility::addInstance(DatabaseUtility::class, $this->databaseUtilityMock);
 

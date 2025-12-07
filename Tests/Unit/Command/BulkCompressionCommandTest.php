@@ -7,17 +7,19 @@ namespace TWOH\TwohTinyPng\Tests\Unit\Command;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use TWOH\TwohTinyPng\Command\BulkCompressionCommand;
 use TWOH\TwohTinyPng\Domain\Service\BulkService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 #[CoversClass(BulkCompressionCommand::class)]
-final class BulkCompressionCommandTest extends TestCase
+final class BulkCompressionCommandTest extends UnitTestCase
 {
+    protected bool $resetSingletonInstances = true;
+
     private MockObject&BulkService $bulkServiceMock;
     private MockObject&InputInterface $inputMock;
     private MockObject&OutputInterface $outputMock;

@@ -7,15 +7,15 @@ namespace TWOH\TwohTinyPng\Tests\Unit\Domain\Model;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\TestCase;
 use TWOH\TwohTinyPng\Domain\Model\Tiny;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * Test case for Tiny model
  */
 #[CoversClass(Tiny::class)]
-final class TinyTest extends TestCase
+final class TinyTest extends UnitTestCase
 {
     private Tiny $subject;
 
@@ -161,9 +161,9 @@ final class TinyTest extends TestCase
     }
 
     #[Test]
-    public function getPidReturnsInitialValue(): void
+    public function getPidReturnsNullAsInitialValue(): void
     {
-        self::assertSame(0, $this->subject->getPid());
+        self::assertNull($this->subject->getPid());
     }
 
     #[Test]

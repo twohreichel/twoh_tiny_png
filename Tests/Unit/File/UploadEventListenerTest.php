@@ -8,17 +8,19 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use TWOH\TwohTinyPng\Domain\Service\TinyPngService;
 use TWOH\TwohTinyPng\File\UploadEventListener;
 use TYPO3\CMS\Core\Resource\Event\AfterFileCommandProcessedEvent;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 #[CoversClass(UploadEventListener::class)]
-final class UploadEventListenerTest extends TestCase
+final class UploadEventListenerTest extends UnitTestCase
 {
+    protected bool $resetSingletonInstances = true;
+
     private MockObject&LoggerInterface $loggerMock;
     private MockObject&TinyPngService $tinyPngServiceMock;
     private MockObject&AfterFileCommandProcessedEvent $eventMock;

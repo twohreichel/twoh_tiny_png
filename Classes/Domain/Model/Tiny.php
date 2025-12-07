@@ -12,11 +12,6 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 class Tiny extends AbstractEntity
 {
     /**
-     * @var int
-     */
-    protected $pid = 0;
-
-    /**
      * @var string
      */
     protected string $identifier = '';
@@ -35,14 +30,6 @@ class Tiny extends AbstractEntity
      * @var string
      */
     protected string $height = '';
-
-    /**
-     * @return int
-     */
-    public function getPid(): int
-    {
-        return $this->pid;
-    }
 
     /**
      * @return string

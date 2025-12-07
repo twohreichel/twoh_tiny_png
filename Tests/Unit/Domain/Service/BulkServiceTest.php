@@ -7,11 +7,11 @@ namespace TWOH\TwohTinyPng\Tests\Unit\Domain\Service;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\TestCase;
 use TWOH\TwohTinyPng\Domain\Service\BulkService;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 #[CoversClass(BulkService::class)]
-final class BulkServiceTest extends TestCase
+final class BulkServiceTest extends UnitTestCase
 {
     private string $tempDir;
 
