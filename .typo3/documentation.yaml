@@ -3,7 +3,6 @@ meta:
   description: Optimize your TYPO3 Images using the TinyPNG API.
   author: Andreas Reichel, Igor Smertin
   license: 'GPL-2.0-or-later'
-  version: '1.0.7'
+  version: '1.0.8'
   extension-key: twoh_tiny_png
   repository: 'https://github.com/twohreichel/twoh_tiny_png'
-  external: 'https://github.com/twohreichel/twoh_tiny_png/blob/main/Documentation/Index.rst'
