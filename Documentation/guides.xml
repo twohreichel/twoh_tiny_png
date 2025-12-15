@@ -4,7 +4,7 @@
         xsi:schemaLocation="https://www.phpdoc.org/guides ../vendor/phpdocumentor/guides-cli/resources/schema/guides.xsd"
         default-code-language="typoscript">
 
-    <project title="Tiny PNG Extension" version="1.0.4" copyright="2025 by TWOH" />
+    <project title="Tiny PNG Extension" version="1.0.9" copyright="2025 by TWOH" />
 
     <extension class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"
                edit-on-github="twohreichel/twoh_tiny_png"
