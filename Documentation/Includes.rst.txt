@@ -4,3 +4,5 @@
 .. |extension_key| replace:: twoh_tiny_png
 .. |project| replace:: Tiny PNG
 .. |author| replace:: Andreas Reichel, Igor Smertin
+.. |typo3_version| replace:: 13.4
+.. |php_version| replace:: 8.2
