@@ -99,6 +99,16 @@ For detailed documentation, visit: [TYPO3 Documentation](https://docs.typo3.org/
 
 ---
 
+## 💖 Support This Project
+
+If you find this extension helpful, please consider supporting its development! Your sponsorship helps maintain and improve this project.
+
+[![Sponsor on GitHub](https://img.shields.io/badge/Sponsor-%E2%9D%A4-red?logo=github)](https://github.com/sponsors/twohreichel)
+
+Every contribution, no matter the size, is greatly appreciated and helps ensure the continued development of this extension. Thank you for your support! 🙏
+
+---
+
 ## 🐛 Issues & Support
 
 Found a bug or have a feature request? Please open an issue on [GitHub](https://github.com/twohreichel/twoh_tiny_png/issues).
